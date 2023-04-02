@@ -82,7 +82,73 @@ main {
 	}
 }
 
-@media screen and (min-width: 950px) {
+@media screen and (max-width: 325px) {
+     #intro {
+        height: 9.5rem; 
+    }
+    @keyframes height {
+	0% {
+		height: 0px;
+		opacity: 0;
+	}
+	100% {
+		height: 9.5rem;
+		opacity: 1;
+	}
+}
+}
+
+@media screen and (min-width: 326px) and (max-width: 370px) {
+
+    #intro {
+        height: 8.5rem; 
+    }
+    @keyframes height {
+	0% {
+		height: 0px;
+		opacity: 0;
+	}
+	100% {
+		height: 8.5rem;
+		opacity: 1;
+	}
+}
+}
+
+@media screen and (min-width: 526px) and (max-width: 1165px) {
+     #intro {
+        height: 5.5rem; 
+    }
+    @keyframes height {
+	0% {
+		height: 0px;
+		opacity: 0;
+	}
+	100% {
+		height: 5.5rem;
+		opacity: 1;
+	}
+}
+}
+
+@media screen and (min-width: 1166px) {
+    #intro {
+        height: 4rem; 
+    }
+    @keyframes height {
+	0% {
+		height: 0px;
+		opacity: 0;
+	}
+	100% {
+		height: 4rem;
+		opacity: 1;
+	}
+}
+    
+}
+
+@media screen and (min-width: 951px) {
 	main {
 		flex-direction: row;
 	}
@@ -93,3 +159,4 @@ main {
 		width: 60vw;
 	}
 }
+
