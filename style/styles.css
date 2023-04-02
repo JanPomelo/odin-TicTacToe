@@ -1,1 +1,37 @@
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100vh;
+    width: 100vw;
+}
+
+header, footer {
+    background-color: rgb(251, 247, 213);
+    padding: 6px;
+    text-align: center;
+}
+
+header > p {
+    margin: 0;
+    font-weight: 800;
+}
+
+h1 {
+    margin: 4px;
+}
+
+footer > p {
+    margin: 4px;
+}
+
+footer :first-child {
+    font-weight: 800;
+    font-size: large;
+}
+
+footer :last-child {
+    font-weight: 800;
+    font-size: small;
+}
 
