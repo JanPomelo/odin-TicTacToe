@@ -1,28 +1,41 @@
+/* eslint-disable new-cap */
 'use strict';
 
 const Gameboard = (() => {
-  const gameBoard = ['', '', '', '', '', '', '', '', ''];
+  const board = [];
+  const rows = 3;
+  const columns = 3;
+
+  for (let i = 0; i < rows; i++) {
+    board[i] = [];
+    for (let j = 0; j < columns; j++) {
+      board[i].push('');
+    }
+  }
   const getgameBoard = () => {
-    return gameBoard;
+    return board;
   };
-  const setMarkOnGameBoard = (mark, number) => {
-    gameBoard[number] = mark;
-  };
-  return {getgameBoard, setMarkOnGameBoard};
+  return {getgameBoard};
 })();
 
-const Player = (name, mark) => {
-  const sayHello = () => {
-    return `Hello, my name is ${name} and my mark is ${mark}.`;
-  };
-  return {sayHello};
+const Player = (mark) => {
+  return {mark};
 };
 
-const player1 = Player('Jan', 'X');
-const player2 = Player('Computer', 'O');
+const GameController = (() => {
+  const players = [Player('O'), Player('X')];
+
+  let activePlayer = players[0];
+
+  // function to change the active Player after each round
+  const changeActivePlayer = () => {
+    activePlayer = activePlayer === players[0] ? players[1] : players[0];
+  };
+
+  return {
+    changeActivePlayer,
+  };
+})();
+
 
 console.log(Gameboard.getgameBoard());
-Gameboard.setMarkOnGameBoard('X', 2);
-console.log(Gameboard.getgameBoard());
-console.log(player1.sayHello());
-console.log(player2.sayHello());
