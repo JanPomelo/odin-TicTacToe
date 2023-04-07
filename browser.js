@@ -2,7 +2,7 @@
 'use strict';
 
 const Gameboard = (() => {
-  let board = [];
+  const board = [];
   const rows = 3;
   const columns = 3;
 
@@ -16,26 +16,36 @@ const Gameboard = (() => {
     return board;
   };
 
-  const setGameBoard = (newBoard) => {
-    board = newBoard;
+  const printGameBoard = () => {
+    console.log(board);
   };
-  return {getGameBoard, setGameBoard};
+
+  const addMarkToGameBoard = (row, column, mark) => {
+    board[row][column] = mark;
+  };
+
+  const checkGameBoard = (row, col, mark) => {
+    if (board[row][col] == '') {
+      addMarkToGameBoard(row, col, mark);
+    } else {
+      console.log(`The tile [${row},${col}] is already taken.`);
+    }
+  };
+  return {getGameBoard, checkGameBoard};
 })();
 
 const Player = (mark) => {
   const setMark = (row, col) => {
-    const board = Gameboard.getGameBoard();
-    board[row][col] = mark;
-    Gameboard.setGameBoard(board);
-    console.log(Gameboard.getGameBoard());
+    Gameboard.checkGameBoard(row, col, mark);
   };
   return {mark, setMark};
 };
 
 const GameController = (() => {
+  // initialize both players
   const players = [Player('O'), Player('X')];
-
   let activePlayer = players[0];
+
 
   // function to change the active Player after each round
   const changeActivePlayer = () => {
