@@ -2,7 +2,7 @@
 'use strict';
 
 const Gameboard = (() => {
-  const board = [];
+  let board = [];
   const rows = 3;
   const columns = 3;
 
@@ -12,14 +12,24 @@ const Gameboard = (() => {
       board[i].push('');
     }
   }
-  const getgameBoard = () => {
+  const getGameBoard = () => {
     return board;
   };
-  return {getgameBoard};
+
+  const setGameBoard = (newBoard) => {
+    board = newBoard;
+  };
+  return {getGameBoard, setGameBoard};
 })();
 
 const Player = (mark) => {
-  return {mark};
+  const setMark = (row, col) => {
+    const board = Gameboard.getGameBoard();
+    board[row][col] = mark;
+    Gameboard.setGameBoard(board);
+    console.log(Gameboard.getGameBoard());
+  };
+  return {mark, setMark};
 };
 
 const GameController = (() => {
@@ -32,10 +42,6 @@ const GameController = (() => {
     activePlayer = activePlayer === players[0] ? players[1] : players[0];
   };
 
-  return {
-    changeActivePlayer,
-  };
+  return {};
 })();
 
-
-console.log(Gameboard.getgameBoard());
