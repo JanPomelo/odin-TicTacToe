@@ -17,6 +17,15 @@ const Gameboard = (() => {
   };
 
   const printGameBoard = () => {
+    /* this prints the Board immidiatly, keep here for debugging
+    for (let i = 0; i < rows; i++) {
+      const oneLine = [];
+      for (let j = 0; j < columns; j++) {
+        oneLine.push(board[i][j]);
+      }
+      console.log(oneLine);
+    }
+    */
     console.log(board);
   };
 
@@ -49,10 +58,12 @@ const GameController = (() => {
   // initialize both players
   const players = [Player('O'), Player('X')];
 
+  // this function calculates a random number for the easy Computer bot
   const rndmNumber = (max) => {
     return Math.floor(Math.random() * max);
   };
 
+  // this function checks if there are 3 same marks in the columns
   const checkVertical = (board, mark, col) => {
     if (board[1][col] === mark) {
       if (board[2][col] === mark) {
@@ -62,6 +73,7 @@ const GameController = (() => {
     return false;
   };
 
+  // this function checks if there are 3 same marks in the row
   const checkHorizontal = (board, mark, row) => {
     if (board[row][1] === mark) {
       if (board[row][2] === mark) {
@@ -71,6 +83,7 @@ const GameController = (() => {
     return false;
   };
 
+  // this function checks if there are 3 same marks in the diagonal
   const checkDiagonal = (board, mark) => {
     if (board[0][0] === mark) {
       if (board[1][1] === mark) {
@@ -89,6 +102,8 @@ const GameController = (() => {
     return false;
   };
 
+  /* this function checks every winCondition and
+  returns true if one of the win conditions is true */
   const checkWinner = (mark) => {
     const board = Gameboard.getGameBoard();
     for (let i = 0; i < board.length; i++) {
@@ -112,23 +127,29 @@ const GameController = (() => {
     return false;
   };
 
-  const playRound = (row, col) => {
+  const makePCmove = (player) => {
     let pcMark = false;
+    do {
+      pcMark = player.setMark(rndmNumber(3), rndmNumber(3));
+    } while (!pcMark);
+    if (checkWinner(player.mark)) {
+      console.log('The ugly thief won the game!');
+    }
+  };
+
+
+  const playRound = (row, col) => {
     if (players[0].setMark(row, col) === true) {
       Gameboard.printGameBoard();
       if (checkWinner(players[0].mark) === true) {
         // endGame(players[0]);
         console.log('Congrats, you won the game!');
       }
-      do {
-        pcMark = players[1].setMark(rndmNumber(3), rndmNumber(3));
-      } while (!pcMark);
-      if (checkWinner(players[1].mark)) {
-        console.log('The ugly thief won the game!');
-      }
+      makePCmove(players[1]);
     }
   };
 
   return {playRound};
 })();
 
+Gameboard.printGameBoard();
