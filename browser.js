@@ -27,16 +27,20 @@ const Gameboard = (() => {
   const checkGameBoard = (row, col, mark) => {
     if (board[row][col] == '') {
       addMarkToGameBoard(row, col, mark);
+      return true;
     } else {
-      console.log(`The tile [${row},${col}] is already taken.`);
+      if (mark === 'O') {
+        console.log(`The tile [${row},${col}] is already taken.`);
+      }
+      return false;
     }
   };
-  return {getGameBoard, checkGameBoard};
+  return {getGameBoard, checkGameBoard, printGameBoard};
 })();
 
 const Player = (mark) => {
   const setMark = (row, col) => {
-    Gameboard.checkGameBoard(row, col, mark);
+    return Gameboard.checkGameBoard(row, col, mark);
   };
   return {mark, setMark};
 };
@@ -44,14 +48,21 @@ const Player = (mark) => {
 const GameController = (() => {
   // initialize both players
   const players = [Player('O'), Player('X')];
-  let activePlayer = players[0];
 
-
-  // function to change the active Player after each round
-  const changeActivePlayer = () => {
-    activePlayer = activePlayer === players[0] ? players[1] : players[0];
+  const rndmNumber = (max) => {
+    return Math.floor(Math.random() * max);
   };
 
-  return {};
+  const playRound = (row, col) => {
+    let pcMark = false;
+    if (players[0].setMark(row, col) === true) {
+      Gameboard.printGameBoard();
+      do {
+        pcMark = players[1].setMark(rndmNumber(3), rndmNumber(3));
+      } while (!pcMark);
+    }
+  };
+
+  return {playRound};
 })();
 
