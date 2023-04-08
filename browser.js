@@ -113,6 +113,10 @@ const GameController = (() => {
     return winner;
   };
 
+  const resetWinner = () => {
+    winner = '';
+  };
+
   // this function checks if there are 3 same marks in the diagonal
   const checkDiagonal = (board, mark) => {
     if (board[0][0] === mark) {
@@ -180,9 +184,7 @@ const GameController = (() => {
     } while (!pcMark);
     Gameboard.printGameBoard();
     if (checkWinner(player.mark)) {
-      console.log('The ugly thief won the game!');
       ScreenController.deleteBoardEventListeners();
-      // Gameboard.createGameBoard();
       return;
     }
   };
@@ -193,16 +195,17 @@ const GameController = (() => {
   const playRound = (row, col) => {
     if (players[0].setMark(row, col) === true) {
       if (checkWinner(players[0].mark) === true) {
-        console.log('Congrats, you won the game!');
         ScreenController.deleteBoardEventListeners();
-        // Gameboard.createGameBoard();
         return;
       }
       makePCmove(players[1]);
     }
   };
 
-  return {playRound, players, setComputerFirst, getComputerFirst, getWinner};
+  return {
+    playRound, players,
+    setComputerFirst, getComputerFirst,
+    getWinner, resetWinner};
 });
 
 const ScreenController = (() => {
@@ -212,7 +215,15 @@ const ScreenController = (() => {
   const buttonMarkX = document.getElementById('markX');
   const endGame = document.getElementById('endGame');
   const endGameText = document.getElementById('endGameText');
+  const newGameBut = document.getElementById('newGame');
 
+  newGameBut.addEventListener('click', () => {
+    addDivClicks();
+    Gameboard.createGameBoard();
+    updateScreen();
+    endGame.classList = ['invis'];
+    game.resetWinner();
+  });
   const enableBoard = (evt) => {
     domBoard.classList = ['boardVisi'];
     if (evt.currentTarget.innerText === 'O') {
@@ -282,10 +293,14 @@ const ScreenController = (() => {
       }
     }
   };
+  const addDivClicks = () => {
+    for (let i = 0; i < boardDivs.length; i++) {
+      boardDivs[i].addEventListener('click', addMarkToDiv);
+    }
+  };
 
-  for (let i = 0; i < boardDivs.length; i++) {
-    boardDivs[i].addEventListener('click', addMarkToDiv);
-  }
+  addDivClicks();
+
   return {deleteBoardEventListeners};
 })();
 
