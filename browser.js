@@ -44,6 +44,10 @@ const Gameboard = (() => {
   return {createGameBoard, getGameBoard, checkGameBoard, printGameBoard};
 })();
 
+/* ------------------------------------------------- */
+/* ------------------------------------------------- */
+/* ------------------------------------------------- */
+
 // factory function to make a playerß
 const Player = (mark) => {
   const setMark = (row, col) => {
@@ -52,10 +56,16 @@ const Player = (mark) => {
   return {mark, setMark};
 };
 
+/* ------------------------------------------------- */
+/* ------------------------------------------------- */
+/* ------------------------------------------------- */
+/* ------------------------------------------------- */
+
 const GameController = (() => {
   // initialize both players
   const players = [Player('O'), Player('X')];
   let computerFirst = false;
+  let winner = '';
   // this function calculates a random number for the easy Computer bot
   const rndmNumber = (max) => {
     return Math.floor(Math.random() * max);
@@ -99,6 +109,10 @@ const GameController = (() => {
     return false;
   };
 
+  const getWinner = () => {
+    return winner;
+  };
+
   // this function checks if there are 3 same marks in the diagonal
   const checkDiagonal = (board, mark) => {
     if (board[0][0] === mark) {
@@ -121,25 +135,41 @@ const GameController = (() => {
   /* this function checks every winCondition and
   returns true if one of the win conditions is true */
   const checkWinner = (mark) => {
+    let isWinner = false;
     const board = Gameboard.getGameBoard();
     for (let i = 0; i < board.length; i++) {
       if (i === 0) {
         for (let j = 0; j < board[i].length; j++) {
           if (checkVertical(board, mark, j)) {
-            return true;
+            isWinner = true;
           }
         }
       }
       if (board[i][0] === mark) {
         if (checkHorizontal(board, mark, i)) {
-          return true;
+          isWinner = true;
         }
       }
     }
     if (checkDiagonal(board, mark)) {
-      return true;
+      isWinner = true;
     }
-    return false;
+    if (isWinner) {
+      if (computerFirst) {
+        if (mark === 'O') {
+          winner = 'computer';
+        } else {
+          winner = 'player';
+        }
+      } else {
+        if (mark === 'O') {
+          winner = 'player';
+        } else {
+          winner = 'computer';
+        }
+      }
+    }
+    return isWinner;
   };
 
   // function to make one move for the PC
@@ -157,6 +187,7 @@ const GameController = (() => {
     }
   };
 
+
   // eslint-disable-next-line max-len
   // function to play one Round -> place one mark for the player and the computer
   const playRound = (row, col) => {
@@ -171,7 +202,7 @@ const GameController = (() => {
     }
   };
 
-  return {playRound, players, setComputerFirst, getComputerFirst};
+  return {playRound, players, setComputerFirst, getComputerFirst, getWinner};
 });
 
 const ScreenController = (() => {
@@ -179,6 +210,8 @@ const ScreenController = (() => {
   const domBoard = document.getElementById('gameBoard');
   const buttonMarkO = document.getElementById('markO');
   const buttonMarkX = document.getElementById('markX');
+  const endGame = document.getElementById('endGame');
+  const endGameText = document.getElementById('endGameText');
 
   const enableBoard = (evt) => {
     domBoard.classList = ['boardVisi'];
@@ -207,7 +240,6 @@ const ScreenController = (() => {
     }
   };
 
-
   const deleteBoardEventListeners = () => {
     const first = game.getComputerFirst();
     for (let i = 0; i < boardDivs.length; i++) {
@@ -233,6 +265,22 @@ const ScreenController = (() => {
     game.playRound(row, col);
     updateScreen();
     evt.currentTarget.removeEventListener('click', addMarkToDiv);
+    showResult();
+  };
+
+  const showResult = () => {
+    const winner = game.getWinner();
+    if (winner != '') {
+      if (winner === 'player') {
+        // eslint-disable-next-line max-len
+        endGameText.innerText = 'Congratulations! You beat the ugly thief and saved the DuckWorld!';
+        endGame.classList = ['visible'];
+      } else {
+        // eslint-disable-next-line max-len
+        endGameText.innerText = 'Oh No! You lost! Now the ugly thief will take over the DuckWorld!';
+        endGame.classList = ['visible'];
+      }
+    }
   };
 
   for (let i = 0; i < boardDivs.length; i++) {
