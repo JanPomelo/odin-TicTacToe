@@ -7,17 +7,20 @@ const Gameboard = (() => {
   const columns = 3;
 
   // create the board
-  for (let i = 0; i < rows; i++) {
-    board[i] = [];
-    for (let j = 0; j < columns; j++) {
-      board[i].push('');
+  const createGameBoard = () => {
+    for (let i = 0; i < rows; i++) {
+      board[i] = [];
+      for (let j = 0; j < columns; j++) {
+        board[i].push('');
+      }
     }
-  }
+  };
 
   // function to get the board
   const getGameBoard = () => {
     return board;
   };
+
   // function to print the board
   const printGameBoard = () => {
     /* this prints the Board immidiatly, keep here for debugging
@@ -49,7 +52,7 @@ const Gameboard = (() => {
       return false;
     }
   };
-  return {getGameBoard, checkGameBoard, printGameBoard};
+  return {createGameBoard, getGameBoard, checkGameBoard, printGameBoard};
 })();
 
 // factory function to make a playerß
@@ -122,7 +125,6 @@ const GameController = (() => {
           }
         }
         if (checkHorizontal(board, mark, i)) {
-          console.log('horizontal');
           return true;
         }
       }
@@ -132,6 +134,7 @@ const GameController = (() => {
     }
     return false;
   };
+
   // function to make one move for the PC
   const makePCmove = (player) => {
     let pcMark = false;
@@ -140,9 +143,12 @@ const GameController = (() => {
     } while (!pcMark);
     if (checkWinner(player.mark)) {
       console.log('The ugly thief won the game!');
+      Gameboard.createGameBoard();
+      return;
     }
   };
 
+  // eslint-disable-next-line max-len
   // function to play one Round -> place one mark for the player and the computer
   const playRound = (row, col) => {
     if (players[0].setMark(row, col) === true) {
@@ -150,6 +156,8 @@ const GameController = (() => {
       if (checkWinner(players[0].mark) === true) {
         // endGame(players[0]);
         console.log('Congrats, you won the game!');
+        Gameboard.createGameBoard();
+        return;
       }
       makePCmove(players[1]);
     }
@@ -158,4 +166,4 @@ const GameController = (() => {
   return {playRound};
 })();
 
-Gameboard.printGameBoard();
+Gameboard.createGameBoard();
