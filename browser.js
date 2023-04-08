@@ -56,10 +56,25 @@ const GameController = (() => {
   // initialize both players
   const players = [Player('O'), Player('X')];
   let computerFirst = false;
-  const firstRound = true;
   // this function calculates a random number for the easy Computer bot
   const rndmNumber = (max) => {
     return Math.floor(Math.random() * max);
+  };
+
+  const getComputerFirst = () => {
+    return computerFirst;
+  };
+
+  const setComputerFirst = (value) => {
+    computerFirst = value;
+    console.log({computerFirst});
+    if (computerFirst) {
+      console.log(computerFirst);
+      const zs = players[0];
+      players[0] = players[1];
+      players[1] = zs;
+      makePCmove(players[1]);
+    }
   };
 
   // this function checks if there are 3 same marks in the columns
@@ -82,22 +97,6 @@ const GameController = (() => {
       }
     }
     return false;
-  };
-
-  const getComputerFirst = () => {
-    return computerFirst;
-  };
-
-  const setComputerFirst = (value) => {
-    computerFirst = value;
-    console.log({computerFirst});
-    if (computerFirst) {
-      console.log(computerFirst);
-      const zs = players[0];
-      players[0] = players[1];
-      players[1] = zs;
-      makePCmove(players[1]);
-    }
   };
 
   // this function checks if there are 3 same marks in the diagonal
@@ -210,9 +209,19 @@ const ScreenController = (() => {
 
 
   const deleteBoardEventListeners = () => {
+    const first = game.getComputerFirst();
     for (let i = 0; i < boardDivs.length; i++) {
       if (boardDivs[i].innerText === '') {
         boardDivs[i].removeEventListener('click', addMarkToDiv);
+      }
+      if (first) {
+        if (boardDivs[i].innerText === 'O') {
+          boardDivs[i].removeEventListener('click', addMarkToDiv);
+        }
+      } else {
+        if (boardDivs[i].innerText === 'X') {
+          boardDivs[i].removeEventListener('click', addMarkToDiv);
+        }
       }
     }
   };
