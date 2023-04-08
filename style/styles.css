@@ -53,6 +53,7 @@ main {
 
 #content {
 	padding-top: 10px;
+	position: relative;
 }
 
 #intro {
@@ -93,7 +94,8 @@ main {
 	margin: 0;
 }
 
-#chooseMark > button {
+#chooseMark > button,
+#newGame {
 	background-color: white;
 	width: 5rem;
 	border-radius: 5rem;
@@ -174,6 +176,54 @@ main {
 
 .Col0 {
 	border-left: none;
+}
+
+#endGame {
+	text-align: center;
+	padding: 5px 5px 0px 5px;
+	font-size: large;
+	font-weight: 700;
+	position: absolute;
+	top: 24%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	align-self: center;
+	justify-self: center;
+	background-color: var(--secondColor);
+	width: 20rem;
+	height: 10rem;
+	border-radius: 2rem;
+	border: black 3px solid;
+	box-shadow: 5px 5px 3px grey;
+}
+
+#endGameText {
+	margin: 0;
+	margin-bottom: 15px;
+}
+
+#newGame {
+	width: 6rem;
+	text-align: center;
+	height: 2.5rem;
+	
+}
+
+#newGame:hover, #newGame:focus {
+	background-color: var(--mainColor);
+}
+
+#newGame:active {
+	box-shadow: 4px 4px 2px grey;
+	border: inset grey 2px;
+}
+
+.invis {
+	visibility: hidden;
+}
+
+.visible {
+	visibility: visible;
 }
 
 @keyframes height {
