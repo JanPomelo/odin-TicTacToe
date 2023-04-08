@@ -64,9 +64,11 @@ const GameController = (() => {
 
   // this function checks if there are 3 same marks in the columns
   const checkVertical = (board, mark, col) => {
-    if (board[1][col] === mark) {
-      if (board[2][col] === mark) {
-        return true;
+    if (board[0][col] === mark) {
+      if (board[1][col] === mark) {
+        if (board[2][col] === mark) {
+          return true;
+        }
       }
     }
     return false;
@@ -122,14 +124,14 @@ const GameController = (() => {
   const checkWinner = (mark) => {
     const board = Gameboard.getGameBoard();
     for (let i = 0; i < board.length; i++) {
-      if (board[i][0] === mark) {
-        if (i === 0) {
-          for (let j = 0; j < board[i].length; j++) {
-            if (checkVertical(board, mark, j)) {
-              return true;
-            }
+      if (i === 0) {
+        for (let j = 0; j < board[i].length; j++) {
+          if (checkVertical(board, mark, j)) {
+            return true;
           }
         }
+      }
+      if (board[i][0] === mark) {
         if (checkHorizontal(board, mark, i)) {
           return true;
         }
