@@ -16,23 +16,12 @@ const Gameboard = (() => {
     }
   };
 
+  const printGameBoard = () => {
+    console.log(board);
+  };
   // function to get the board
   const getGameBoard = () => {
     return board;
-  };
-
-  // function to print the board
-  const printGameBoard = () => {
-    /* this prints the Board immidiatly, keep here for debugging
-    for (let i = 0; i < rows; i++) {
-      const oneLine = [];
-      for (let j = 0; j < columns; j++) {
-        oneLine.push(board[i][j]);
-      }
-      console.log(oneLine);
-    }
-    */
-    console.log(board);
   };
 
   // function to add the mark to the board
@@ -66,7 +55,8 @@ const Player = (mark) => {
 const GameController = (() => {
   // initialize both players
   const players = [Player('O'), Player('X')];
-
+  let computerFirst = false;
+  const firstRound = true;
   // this function calculates a random number for the easy Computer bot
   const rndmNumber = (max) => {
     return Math.floor(Math.random() * max);
@@ -90,6 +80,22 @@ const GameController = (() => {
       }
     }
     return false;
+  };
+
+  const getComputerFirst = () => {
+    return computerFirst;
+  };
+
+  const setComputerFirst = (value) => {
+    computerFirst = value;
+    console.log({computerFirst});
+    if (computerFirst) {
+      console.log(computerFirst);
+      const zs = players[0];
+      players[0] = players[1];
+      players[1] = zs;
+      makePCmove(players[1]);
+    }
   };
 
   // this function checks if there are 3 same marks in the diagonal
@@ -154,7 +160,6 @@ const GameController = (() => {
   // function to play one Round -> place one mark for the player and the computer
   const playRound = (row, col) => {
     if (players[0].setMark(row, col) === true) {
-      Gameboard.printGameBoard();
       if (checkWinner(players[0].mark) === true) {
         console.log('Congrats, you won the game!');
         ScreenController.deleteBoardEventListeners();
@@ -165,12 +170,29 @@ const GameController = (() => {
     }
   };
 
-  return {playRound, players};
+  return {playRound, players, setComputerFirst, getComputerFirst};
 });
 
 const ScreenController = (() => {
-  const translateDivToBoard = [[0, 0], [0, 1], [0, 2], [1, 0], [1, 1], [1, 2], [2, 0], [2, 1], [2, 2]];
   const game = GameController();
+  const domBoard = document.getElementById('gameBoard');
+  const buttonMarkO = document.getElementById('markO');
+  const buttonMarkX = document.getElementById('markX');
+
+  const enableBoard = (evt) => {
+    domBoard.classList = ['boardVisi'];
+    if (evt.currentTarget.innerText === 'O') {
+      game.setComputerFirst(false);
+    } else {
+      game.setComputerFirst(true);
+      updateScreen();
+    }
+  };
+
+  buttonMarkO.addEventListener('click', enableBoard);
+  buttonMarkX.addEventListener('click', enableBoard);
+
+
   const boardDivs = document.getElementsByClassName('boardDiv');
 
   const updateScreen = () => {
@@ -205,7 +227,6 @@ const ScreenController = (() => {
   for (let i = 0; i < boardDivs.length; i++) {
     boardDivs[i].addEventListener('click', addMarkToDiv);
   }
-
   return {deleteBoardEventListeners};
 })();
 

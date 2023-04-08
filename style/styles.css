@@ -1,280 +1,286 @@
 :root {
-  --mainColor: #fdf8e1;
-  --secondColor: #f9dc5c;
-  --delayTime: 1.7s;
-  font-family: Poppins;
-  font-size: 12px;
+	--mainColor: #fdf8e1;
+	--secondColor: #f9dc5c;
+	--delayTime: 1.7s;
+	font-family: Poppins;
+	font-size: 12px;
 }
 
 body {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  height: 100vh;
-  width: 100vw;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	height: 100vh;
+	width: 100vw;
 }
 
 header,
 footer {
-  background-color: var(--secondColor);
-  padding: 6px;
-  text-align: center;
+	background-color: var(--secondColor);
+	padding: 6px;
+	text-align: center;
 }
 
 header > p {
-  margin: 0;
-  font-weight: 800;
+	margin: 0;
+	font-weight: 800;
 }
 
 h1 {
-  margin: 4px;
+	margin: 4px;
 }
 
 footer > p {
-  margin: 4px;
+	margin: 4px;
 }
 
 footer :first-child {
-  font-weight: 800;
-  font-size: large;
+	font-weight: 800;
+	font-size: large;
 }
 
 footer :last-child {
-  font-weight: 800;
-  font-size: small;
+	font-weight: 800;
+	font-size: small;
 }
 
 main {
-  background-color: var(--mainColor);
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
+	background-color: var(--mainColor);
+	flex-grow: 1;
+	display: flex;
+	flex-direction: column;
 }
 
 #content {
-  padding-top: 10px;
+	padding-top: 10px;
 }
 
 #intro {
-  margin: 0px 5px;
-  padding: 5px 10px 0px 10px;
-  text-align: center;
-  overflow: hidden;
-  animation: height 4s;
-  height: 7.5rem;
-  border: solid black 3px;
-  border-radius: 1rem;
+	margin: 0px 5px;
+	padding: 5px 10px 0px 10px;
+	text-align: center;
+	overflow: hidden;
+	animation: height 4s;
+	height: 7.5rem;
+	border: solid black 3px;
+	border-radius: 1rem;
 }
 
 #intro > span {
-  font-weight: 700;
-  font-style: italic;
+	font-weight: 700;
+	font-style: italic;
 }
 
 #chooseMark {
-  display: grid;
-  opacity: 0;
-  grid-template-columns: 1fr 1fr;
-  column-gap: 20px;
-  text-align: center;
-  overflow: hidden;
-  animation: height2 4s forwards;
-  animation-delay: 3s;
-  margin: 0px 5px;
-  grid-template-rows: 2rem 3rem;
-  align-items: center;
+	display: grid;
+	opacity: 0;
+	grid-template-columns: 1fr 1fr;
+	column-gap: 20px;
+	text-align: center;
+	overflow: hidden;
+	animation: height2 4s forwards;
+	animation-delay: 3s;
+	margin: 0px 5px;
+	grid-template-rows: 2rem 3rem;
+	align-items: center;
 }
 
 #chooseMark > p {
-  grid-column: 1/-1;
-  text-align: center;
-  font-weight: 700;
-  font-size: larger;
-  margin: 0;
+	grid-column: 1/-1;
+	text-align: center;
+	font-weight: 700;
+	font-size: larger;
+	margin: 0;
 }
 
 #chooseMark > button {
-  background-color: white;
-  width: 5rem;
-  border-radius: 5rem;
-  height: 2rem;
-  border: black solid 2px;
-  box-shadow: 2px 2px 1px grey;
-  color: black;
+	background-color: white;
+	width: 5rem;
+	border-radius: 5rem;
+	height: 2rem;
+	border: black solid 2px;
+	box-shadow: 2px 2px 1px grey;
+	color: black;
 }
 
 #chooseMark > button:first-of-type {
-  justify-self: end;
+	justify-self: end;
 }
 
 #chooseMark > button:hover,
 #chooseMark > button:focus {
-  background-color: var(--secondColor);
+	background-color: var(--secondColor);
 }
 
 #chooseMark > button:active {
-  background-color: var(--secondColor);
-  box-shadow: 4px 4px 2px grey;
-  border: inset grey 2px;
+	background-color: var(--secondColor);
+	box-shadow: 4px 4px 2px grey;
+	border: inset grey 2px;
 }
 
 #gameBoard {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  grid-template-rows: 1fr 1fr 1fr;
-  background-color: white;
-  width: 25rem;
-  height: 25rem;
-  margin: 0px auto;
-  opacity: 0;
-  overflow: hidden;
-  animation: height3 4s forwards;
-  animation-delay: 6s;
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr;
+	grid-template-rows: 1fr 1fr 1fr;
+	background-color: white;
+	width: 25rem;
+	height: 25rem;
+}
+
+.boardInvis {
+	visibility: hidden;
+}
+
+.boardVisi {
+	margin: 0px auto;
+	opacity: 0;
+	overflow: hidden;
+	animation: height3 4s forwards;
 }
 
 .boardDiv {
-  width: 100%;
-  height: 100%;
-  margin: 0;
-  border: 2px solid black;
-  box-sizing: content-box;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 6rem;
-  padding: 0;
+	width: 100%;
+	height: 100%;
+	margin: 0;
+	border: 2px solid black;
+	box-sizing: content-box;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	font-size: 6rem;
+	padding: 0;
 }
 
 .Row1 {
-  border-top: none;
-  border-bottom: none;
+	border-top: none;
+	border-bottom: none;
 }
 .Col1 {
-  border-right: none;
-  border-left: none;
+	border-right: none;
+	border-left: none;
 }
 
 .Row0 {
-  border-top: none;
+	border-top: none;
 }
 
 .Row2 {
-  border-bottom: none;
+	border-bottom: none;
 }
 
 .Col2 {
-  border-right: none;
+	border-right: none;
 }
 
 .Col0 {
-  border-left: none;
+	border-left: none;
 }
 
 @keyframes height {
-  0% {
-    height: 0px;
-    opacity: 0;
-  }
-  100% {
-    height: 7.5rem;
-    opacity: 1;
-  }
+	0% {
+		height: 0px;
+		opacity: 0;
+	}
+	100% {
+		height: 7.5rem;
+		opacity: 1;
+	}
 }
 
 @keyframes height2 {
-  0% {
-    height: 0px;
-    opacity: 0;
-  }
-  100% {
-    height: 5.5rem;
-    opacity: 1;
-  }
+	0% {
+		height: 0px;
+		opacity: 0;
+	}
+	100% {
+		height: 5.5rem;
+		opacity: 1;
+	}
 }
 
 @keyframes height3 {
-  0% {
-    height: 0px;
-    opacity: 0;
-  }
-  100% {
-    height: 25rem;
-    opacity: 1;
-  }
+	0% {
+		height: 0px;
+		opacity: 0;
+	}
+	100% {
+		height: 25rem;
+		opacity: 1;
+	}
 }
 
 @media screen and (max-width: 325px) {
-  #intro {
-    height: 9.5rem;
-  }
-  @keyframes height {
-    0% {
-      height: 0px;
-      opacity: 0;
-    }
-    100% {
-      height: 9.5rem;
-      opacity: 1;
-    }
-  }
+	#intro {
+		height: 9.5rem;
+	}
+	@keyframes height {
+		0% {
+			height: 0px;
+			opacity: 0;
+		}
+		100% {
+			height: 9.5rem;
+			opacity: 1;
+		}
+	}
 }
 
 @media screen and (min-width: 326px) and (max-width: 370px) {
-  #intro {
-    height: 8.5rem;
-  }
-  @keyframes height {
-    0% {
-      height: 0px;
-      opacity: 0;
-    }
-    100% {
-      height: 8.5rem;
-      opacity: 1;
-    }
-  }
+	#intro {
+		height: 8.5rem;
+	}
+	@keyframes height {
+		0% {
+			height: 0px;
+			opacity: 0;
+		}
+		100% {
+			height: 8.5rem;
+			opacity: 1;
+		}
+	}
 }
 
 @media screen and (min-width: 526px) and (max-width: 1165px) {
-  #intro {
-    height: 5.5rem;
-  }
-  @keyframes height {
-    0% {
-      height: 0px;
-      opacity: 0;
-    }
-    100% {
-      height: 5.5rem;
-      opacity: 1;
-    }
-  }
+	#intro {
+		height: 5.5rem;
+	}
+	@keyframes height {
+		0% {
+			height: 0px;
+			opacity: 0;
+		}
+		100% {
+			height: 5.5rem;
+			opacity: 1;
+		}
+	}
 }
 
 @media screen and (min-width: 1166px) {
-  #intro {
-    height: 4rem;
-  }
-  @keyframes height {
-    0% {
-      height: 0px;
-      opacity: 0;
-    }
-    100% {
-      height: 4rem;
-      opacity: 1;
-    }
-  }
+	#intro {
+		height: 4rem;
+	}
+	@keyframes height {
+		0% {
+			height: 0px;
+			opacity: 0;
+		}
+		100% {
+			height: 4rem;
+			opacity: 1;
+		}
+	}
 }
 
 @media screen and (min-width: 951px) {
-  main {
-    flex-direction: row;
-  }
-  .sideDiv {
-    width: 20vw;
-  }
-  #content {
-    width: 60vw;
-  }
+	main {
+		flex-direction: row;
+	}
+	.sideDiv {
+		width: 20vw;
+	}
+	#content {
+		width: 60vw;
+	}
 }
