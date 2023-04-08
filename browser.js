@@ -141,9 +141,11 @@ const GameController = (() => {
     do {
       pcMark = player.setMark(rndmNumber(3), rndmNumber(3));
     } while (!pcMark);
+    Gameboard.printGameBoard();
     if (checkWinner(player.mark)) {
       console.log('The ugly thief won the game!');
-      Gameboard.createGameBoard();
+      ScreenController.deleteBoardEventListeners();
+      // Gameboard.createGameBoard();
       return;
     }
   };
@@ -154,16 +156,57 @@ const GameController = (() => {
     if (players[0].setMark(row, col) === true) {
       Gameboard.printGameBoard();
       if (checkWinner(players[0].mark) === true) {
-        // endGame(players[0]);
         console.log('Congrats, you won the game!');
-        Gameboard.createGameBoard();
+        ScreenController.deleteBoardEventListeners();
+        // Gameboard.createGameBoard();
         return;
       }
       makePCmove(players[1]);
     }
   };
 
-  return {playRound};
+  return {playRound, players};
+});
+
+const ScreenController = (() => {
+  const translateDivToBoard = [[0, 0], [0, 1], [0, 2], [1, 0], [1, 1], [1, 2], [2, 0], [2, 1], [2, 2]];
+  const game = GameController();
+  const boardDivs = document.getElementsByClassName('boardDiv');
+
+  const updateScreen = () => {
+    let boardDivCounter = 0;
+    const board = Gameboard.getGameBoard();
+    for (let i = 0; i < board.length; i++) {
+      for (let j = 0; j < board[i].length; j++) {
+        boardDivs[boardDivCounter].innerText = board[i][j];
+        boardDivCounter++;
+      }
+    }
+  };
+
+
+  const deleteBoardEventListeners = () => {
+    for (let i = 0; i < boardDivs.length; i++) {
+      if (boardDivs[i].innerText === '') {
+        boardDivs[i].removeEventListener('click', addMarkToDiv);
+      }
+    }
+  };
+
+  const addMarkToDiv = (evt) => {
+    const classes = evt.currentTarget.classList;
+    const row = classes[1].substring(classes[1].length - 1);
+    const col = classes[2].substring(classes[2].length - 1);
+    game.playRound(row, col);
+    updateScreen();
+    evt.currentTarget.removeEventListener('click', addMarkToDiv);
+  };
+
+  for (let i = 0; i < boardDivs.length; i++) {
+    boardDivs[i].addEventListener('click', addMarkToDiv);
+  }
+
+  return {deleteBoardEventListeners};
 })();
 
 Gameboard.createGameBoard();

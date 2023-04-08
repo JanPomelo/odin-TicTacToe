@@ -145,28 +145,28 @@ main {
   padding: 0;
 }
 
-.midRow {
+.Row1 {
   border-top: none;
   border-bottom: none;
 }
-.midCol {
+.Col1 {
   border-right: none;
   border-left: none;
 }
 
-.topRow {
+.Row0 {
   border-top: none;
 }
 
-.botRow {
+.Row2 {
   border-bottom: none;
 }
 
-.rightCol {
+.Col2 {
   border-right: none;
 }
 
-.leftCol {
+.Col0 {
   border-left: none;
 }
 
