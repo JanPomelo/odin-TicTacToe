@@ -6,16 +6,19 @@ const Gameboard = (() => {
   const rows = 3;
   const columns = 3;
 
+  // create the board
   for (let i = 0; i < rows; i++) {
     board[i] = [];
     for (let j = 0; j < columns; j++) {
       board[i].push('');
     }
   }
+
+  // function to get the board
   const getGameBoard = () => {
     return board;
   };
-
+  // function to print the board
   const printGameBoard = () => {
     /* this prints the Board immidiatly, keep here for debugging
     for (let i = 0; i < rows; i++) {
@@ -29,10 +32,12 @@ const Gameboard = (() => {
     console.log(board);
   };
 
+  // function to add the mark to the board
   const addMarkToGameBoard = (row, column, mark) => {
     board[row][column] = mark;
   };
 
+  // function to check the board if the move is valid
   const checkGameBoard = (row, col, mark) => {
     if (board[row][col] == '') {
       addMarkToGameBoard(row, col, mark);
@@ -47,6 +52,7 @@ const Gameboard = (() => {
   return {getGameBoard, checkGameBoard, printGameBoard};
 })();
 
+// factory function to make a playerß
 const Player = (mark) => {
   const setMark = (row, col) => {
     return Gameboard.checkGameBoard(row, col, mark);
@@ -126,7 +132,7 @@ const GameController = (() => {
     }
     return false;
   };
-
+  // function to make one move for the PC
   const makePCmove = (player) => {
     let pcMark = false;
     do {
@@ -137,7 +143,7 @@ const GameController = (() => {
     }
   };
 
-
+  // function to play one Round -> place one mark for the player and the computer
   const playRound = (row, col) => {
     if (players[0].setMark(row, col) === true) {
       Gameboard.printGameBoard();
