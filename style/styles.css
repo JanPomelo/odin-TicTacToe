@@ -84,6 +84,7 @@ main {
 	margin: 0px 5px;
 	grid-template-rows: 2rem 3rem;
 	align-items: center;
+	position: relative;
 }
 
 #chooseMark > p {
@@ -195,6 +196,7 @@ main {
 	border-radius: 2rem;
 	border: black 3px solid;
 	box-shadow: 5px 5px 3px grey;
+	z-index: 99;
 }
 
 #endGameText {
@@ -206,10 +208,10 @@ main {
 	width: 6rem;
 	text-align: center;
 	height: 2.5rem;
-	
 }
 
-#newGame:hover, #newGame:focus {
+#newGame:hover,
+#newGame:focus {
 	background-color: var(--mainColor);
 }
 
