@@ -208,6 +208,11 @@ const GameController = (() => {
     getWinner, resetWinner};
 });
 
+/* ------------------------------------------------- */
+/* ------------------------------------------------- */
+/* ------------------------------------------------- */
+/* ------------------------------------------------- */
+
 const ScreenController = (() => {
   const game = GameController();
   const domBoard = document.getElementById('gameBoard');
@@ -223,7 +228,35 @@ const ScreenController = (() => {
     updateScreen();
     endGame.classList = ['invis'];
     game.resetWinner();
+    showButtons();
+    enableButtons();
+    disableBoard();
   });
+
+  const disableButtons = () => {
+    buttonMarkO.disabled = true;
+    buttonMarkX.disabled = true;
+  };
+
+  const hideButtons = () => {
+    buttonMarkO.style.visibility = 'hidden';
+    buttonMarkX.style.visibility = 'hidden';
+  };
+
+  const showButtons = () => {
+    buttonMarkO.style.visibility = 'visible';
+    buttonMarkX.style.visibility = 'visible';
+  };
+
+  const enableButtons = () => {
+    buttonMarkO.disabled = false;
+    buttonMarkX.disabled = false;
+  };
+
+  const disableBoard = (evt) => {
+    domBoard.classList = ['boardInvis'];
+  };
+
   const enableBoard = (evt) => {
     domBoard.classList = ['boardVisi'];
     if (evt.currentTarget.innerText === 'O') {
@@ -232,6 +265,8 @@ const ScreenController = (() => {
       game.setComputerFirst(true);
       updateScreen();
     }
+    disableButtons();
+    hideButtons();
   };
 
   buttonMarkO.addEventListener('click', enableBoard);
