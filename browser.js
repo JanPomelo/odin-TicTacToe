@@ -137,6 +137,22 @@ const GameController = (() => {
     return false;
   };
 
+  const checkDraw = () => {
+    const board = Gameboard.getGameBoard();
+    let emptyCount = 0;
+    for (let i = 0; i < board.length; i++) {
+      for (let j = 0; j < board[i].length; j++) {
+        if (board[i][j] === '') {
+          emptyCount++;
+        }
+      }
+    }
+    if (emptyCount === 0) {
+      return true;
+    }
+    return false;
+  };
+
   /* this function checks every winCondition and
   returns true if one of the win conditions is true */
   const checkWinner = (mark) => {
@@ -173,6 +189,10 @@ const GameController = (() => {
           winner = 'computer';
         }
       }
+    }
+    if (checkDraw()) {
+      isWinner = true;
+      winner = 'draw';
     }
     return isWinner;
   };
@@ -322,9 +342,13 @@ const ScreenController = (() => {
         // eslint-disable-next-line max-len
         endGameText.innerText = 'Congratulations! You beat the ugly thief and saved the DuckWorld!';
         endGame.classList = ['visible'];
-      } else {
+      } else if (winner === 'computer') {
         // eslint-disable-next-line max-len
         endGameText.innerText = 'Oh No! You lost! Now the ugly thief will take over the DuckWorld!';
+        endGame.classList = ['visible'];
+      } else {
+        // eslint-disable-next-line max-len
+        endGameText.innerText = `It's a draw! Try to beat the ugly thief in the next round! Good luck!`;
         endGame.classList = ['visible'];
       }
     }
