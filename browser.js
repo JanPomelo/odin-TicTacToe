@@ -63,7 +63,7 @@ const Player = (mark) => {
 
 const GameController = (() => {
   // initialize both players
-  const players = [Player('O'), Player('X')];
+  let players = [];
   let computerFirst = false;
   let winner = '';
   // this function calculates a random number for the easy Computer bot
@@ -76,6 +76,7 @@ const GameController = (() => {
   };
 
   const setComputerFirst = (value) => {
+    players = [Player('O'), Player('X')];
     computerFirst = value;
     console.log({computerFirst});
     if (computerFirst) {
