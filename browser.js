@@ -189,8 +189,7 @@ const GameController = (() => {
           winner = 'computer';
         }
       }
-    }
-    if (checkDraw()) {
+    } else if (checkDraw()) {
       isWinner = true;
       winner = 'draw';
     }
