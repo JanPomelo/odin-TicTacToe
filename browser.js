@@ -358,7 +358,7 @@ const ScreenController = (() => {
         console.log({row, col});
         if (row === winTiles[j][0]) {
           if (col === winTiles[j][1]) {
-            boardDivs[i].style.backgroundColor = 'yellow';
+            boardDivs[i].style.backgroundColor = '#f9dc5c';
           }
         }
       }
