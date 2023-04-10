@@ -66,6 +66,7 @@ const GameController = (() => {
   let players = [];
   let computerFirst = false;
   let winner = '';
+  let winTiles = [];
   // this function calculates a random number for the easy Computer bot
   const rndmNumber = (max) => {
     return Math.floor(Math.random() * max);
@@ -93,6 +94,7 @@ const GameController = (() => {
     if (board[0][col] === mark) {
       if (board[1][col] === mark) {
         if (board[2][col] === mark) {
+          winTiles = [[0, col], [1, col], [2, col]];
           return true;
         }
       }
@@ -104,6 +106,7 @@ const GameController = (() => {
   const checkHorizontal = (board, mark, row) => {
     if (board[row][1] === mark) {
       if (board[row][2] === mark) {
+        winTiles = [[row, 0], [row, 1], [row, 2]];
         return true;
       }
     }
@@ -123,6 +126,7 @@ const GameController = (() => {
     if (board[0][0] === mark) {
       if (board[1][1] === mark) {
         if (board[2][2] === mark) {
+          winTiles = [[0, 0], [1, 1], [2, 2]];
           return true;
         }
       }
@@ -130,6 +134,7 @@ const GameController = (() => {
     if (board[0][2] === mark) {
       if (board[1][1] === mark) {
         if (board[2][0] === mark) {
+          winTiles = [[0, 2], [1, 1], [2, 0]];
           return true;
         }
       }
@@ -153,6 +158,13 @@ const GameController = (() => {
     return false;
   };
 
+  const getWinTiles = () => {
+    return winTiles;
+  };
+
+  const resetWinTiles = () => {
+    winTiles = [];
+  };
   /* this function checks every winCondition and
   returns true if one of the win conditions is true */
   const checkWinner = (mark) => {
@@ -225,7 +237,7 @@ const GameController = (() => {
   return {
     playRound, players,
     setComputerFirst, getComputerFirst,
-    getWinner, resetWinner};
+    getWinner, resetWinner, getWinTiles, resetWinTiles};
 });
 
 /* ------------------------------------------------- */
@@ -251,6 +263,7 @@ const ScreenController = (() => {
     showButtons();
     enableButtons();
     disableBoard();
+    game.resetWinTiles();
   });
 
   const disableButtons = () => {
@@ -273,7 +286,7 @@ const ScreenController = (() => {
     buttonMarkX.disabled = false;
   };
 
-  const disableBoard = (evt) => {
+  const disableBoard = () => {
     domBoard.classList = ['boardInvis'];
   };
 
@@ -285,6 +298,7 @@ const ScreenController = (() => {
       game.setComputerFirst(true);
       updateScreen();
     }
+    resetTileColors();
     disableButtons();
     hideButtons();
   };
@@ -334,9 +348,33 @@ const ScreenController = (() => {
     showResult();
   };
 
+  const makeWinTilesVisible = () => {
+    const winTiles = game.getWinTiles();
+    for (let i = 0; i < boardDivs.length; i++) {
+      const classes = boardDivs[i].classList;
+      const row = parseInt(classes[1].substring(classes[1].length - 1));
+      const col = parseInt(classes[2].substring(classes[2].length - 1));
+      for (let j = 0; j < winTiles.length; j++) {
+        console.log({row, col});
+        if (row === winTiles[j][0]) {
+          if (col === winTiles[j][1]) {
+            boardDivs[i].style.backgroundColor = 'yellow';
+          }
+        }
+      }
+    }
+  };
+
+  const resetTileColors = () => {
+    for (let i = 0; i < boardDivs.length; i++) {
+      boardDivs[i].style.backgroundColor = 'white';
+    }
+  };
+
   const showResult = () => {
     const winner = game.getWinner();
     if (winner != '') {
+      makeWinTilesVisible();
       if (winner === 'player') {
         // eslint-disable-next-line max-len
         endGameText.innerText = 'Congratulations! You beat the ugly thief and saved the DuckWorld!';
@@ -352,6 +390,7 @@ const ScreenController = (() => {
       }
     }
   };
+
   const addDivClicks = () => {
     for (let i = 0; i < boardDivs.length; i++) {
       boardDivs[i].addEventListener('click', addMarkToDiv);

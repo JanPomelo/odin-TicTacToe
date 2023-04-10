@@ -157,10 +157,16 @@ main {
 .Row1 {
 	border-top: none;
 	border-bottom: none;
+	z-index: -98;
 }
 .Col1 {
 	border-right: none;
 	border-left: none;
+	z-index: -98;
+}
+
+#middleTile {
+	z-index: -99;
 }
 
 .Row0 {
