@@ -5,7 +5,6 @@ const Gameboard = (() => {
   const board = [];
   const rows = 3;
   const columns = 3;
-
   // create the board
   const createGameBoard = () => {
     for (let i = 0; i < rows; i++) {
@@ -15,10 +14,11 @@ const Gameboard = (() => {
       }
     }
   };
-
+  /*
   const printGameBoard = () => {
     console.log(board);
   };
+  */
   // function to get the board
   const getGameBoard = () => {
     return board;
@@ -34,14 +34,10 @@ const Gameboard = (() => {
     if (board[row][col] == '') {
       addMarkToGameBoard(row, col, mark);
       return true;
-    } else {
-      if (mark === 'O') {
-        console.log(`The tile [${row},${col}] is already taken.`);
-      }
-      return false;
     }
+    return false;
   };
-  return {createGameBoard, getGameBoard, checkGameBoard, printGameBoard};
+  return {createGameBoard, getGameBoard, checkGameBoard};
 })();
 
 /* ------------------------------------------------- */
@@ -67,6 +63,7 @@ const GameController = (() => {
   let computerFirst = false;
   let winner = '';
   let winTiles = [];
+
   // this function calculates a random number for the easy Computer bot
   const rndmNumber = (max) => {
     return Math.floor(Math.random() * max);
@@ -79,9 +76,7 @@ const GameController = (() => {
   const setComputerFirst = (value) => {
     players = [Player('O'), Player('X')];
     computerFirst = value;
-    console.log({computerFirst});
     if (computerFirst) {
-      console.log(computerFirst);
       const zs = players[0];
       players[0] = players[1];
       players[1] = zs;
@@ -214,7 +209,6 @@ const GameController = (() => {
     do {
       pcMark = player.setMark(rndmNumber(3), rndmNumber(3));
     } while (!pcMark);
-    Gameboard.printGameBoard();
     if (checkWinner(player.mark)) {
       ScreenController.deleteBoardEventListeners();
       return;
@@ -230,7 +224,9 @@ const GameController = (() => {
         ScreenController.deleteBoardEventListeners();
         return;
       }
-      makePCmove(players[1]);
+      setTimeout(() => {
+        makePCmove(players[1]);
+      }, 500);
     }
   };
 
@@ -253,6 +249,7 @@ const ScreenController = (() => {
   const endGame = document.getElementById('endGame');
   const endGameText = document.getElementById('endGameText');
   const newGameBut = document.getElementById('newGame');
+  let clickAgain = true;
 
   newGameBut.addEventListener('click', () => {
     addDivClicks();
@@ -339,13 +336,21 @@ const ScreenController = (() => {
   };
 
   const addMarkToDiv = (evt) => {
-    const classes = evt.currentTarget.classList;
-    const row = classes[1].substring(classes[1].length - 1);
-    const col = classes[2].substring(classes[2].length - 1);
-    game.playRound(row, col);
-    updateScreen();
-    evt.currentTarget.removeEventListener('click', addMarkToDiv);
-    showResult();
+    if (clickAgain) {
+      clickAgain = false;
+      const classes = evt.currentTarget.classList;
+      const row = classes[1].substring(classes[1].length - 1);
+      const col = classes[2].substring(classes[2].length - 1);
+      game.playRound(row, col);
+      updateScreen();
+      showResult();
+      evt.currentTarget.removeEventListener('click', addMarkToDiv);
+      setTimeout(() => {
+        updateScreen();
+        showResult();
+        clickAgain = true;
+      }, 1000);
+    }
   };
 
   const makeWinTilesVisible = () => {
@@ -355,7 +360,6 @@ const ScreenController = (() => {
       const row = parseInt(classes[1].substring(classes[1].length - 1));
       const col = parseInt(classes[2].substring(classes[2].length - 1));
       for (let j = 0; j < winTiles.length; j++) {
-        console.log({row, col});
         if (row === winTiles[j][0]) {
           if (col === winTiles[j][1]) {
             boardDivs[i].style.backgroundColor = '#f9dc5c';
