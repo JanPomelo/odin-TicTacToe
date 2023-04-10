@@ -203,6 +203,21 @@ const GameController = (() => {
     return isWinner;
   };
 
+  // function to return points when a game is won or lost
+  const getAllAvailableMoves = () => {
+    const board = Gameboard.getGameBoard();
+    const freeTiles = [];
+    for (let i = 0; i < board.length; i++) {
+      for (let j = 0; j < board[i].length; j++) {
+        if (board[i][j] === '') {
+          freeTiles.push([i, j]);
+        }
+      }
+    }
+    return freeTiles;
+  };
+
+
   // function to make one move for the PC
   const makePCmove = (player) => {
     let pcMark = false;
