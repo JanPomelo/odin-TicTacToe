@@ -1,3 +1,4 @@
+/* eslint-disable require-jsdoc */
 /* eslint-disable new-cap */
 'use strict';
 
@@ -20,17 +21,17 @@ const Gameboard = (() => {
   };
   */
   // function to get the board
-  const getGameBoard = () => {
+  function getGameBoard() {
     return board;
   };
 
   // function to add the mark to the board
-  const addMarkToGameBoard = (row, column, mark) => {
+  function addMarkToGameBoard(row, column, mark) {
     board[row][column] = mark;
   };
 
   // function to check the board if the move is valid
-  const checkGameBoard = (row, col, mark) => {
+  function checkGameBoard(row, col, mark) {
     if (board[row][col] == '') {
       addMarkToGameBoard(row, col, mark);
       return true;
@@ -46,7 +47,7 @@ const Gameboard = (() => {
 
 // factory function to make a playerß
 const Player = (mark) => {
-  const setMark = (row, col) => {
+  function setMark(row, col) {
     return Gameboard.checkGameBoard(row, col, mark);
   };
   return {mark, setMark};
@@ -80,15 +81,19 @@ const GameController = (() => {
       const zs = players[0];
       players[0] = players[1];
       players[1] = zs;
-      makePCmove(players[1]);
+      if (ScreenController.diffiBut.value === 'Unbeatable') {
+        makeVirtualMove();
+      } else {
+        makeRndmMove(players[1]);
+      }
     }
   };
 
   // this function checks if there are 3 same marks in the columns
-  const checkVertical = (board, mark, col) => {
-    if (board[0][col] === mark) {
-      if (board[1][col] === mark) {
-        if (board[2][col] === mark) {
+  const checkVertical = (currentBoard, mark, col) => {
+    if (currentBoard[0][col] === mark) {
+      if (currentBoard[1][col] === mark) {
+        if (currentBoard[2][col] === mark) {
           winTiles = [[0, col], [1, col], [2, col]];
           return true;
         }
@@ -98,9 +103,9 @@ const GameController = (() => {
   };
 
   // this function checks if there are 3 same marks in the row
-  const checkHorizontal = (board, mark, row) => {
-    if (board[row][1] === mark) {
-      if (board[row][2] === mark) {
+  const checkHorizontal = (currentBoard, mark, row) => {
+    if (currentBoard[row][1] === mark) {
+      if (currentBoard[row][2] === mark) {
         winTiles = [[row, 0], [row, 1], [row, 2]];
         return true;
       }
@@ -108,27 +113,27 @@ const GameController = (() => {
     return false;
   };
 
-  const getWinner = () => {
+  function getWinner() {
     return winner;
   };
 
-  const resetWinner = () => {
+  function resetWinner() {
     winner = '';
   };
 
   // this function checks if there are 3 same marks in the diagonal
-  const checkDiagonal = (board, mark) => {
-    if (board[0][0] === mark) {
-      if (board[1][1] === mark) {
-        if (board[2][2] === mark) {
+  const checkDiagonal = (currentBoard, mark) => {
+    if (currentBoard[0][0] === mark) {
+      if (currentBoard[1][1] === mark) {
+        if (currentBoard[2][2] === mark) {
           winTiles = [[0, 0], [1, 1], [2, 2]];
           return true;
         }
       }
     }
-    if (board[0][2] === mark) {
-      if (board[1][1] === mark) {
-        if (board[2][0] === mark) {
+    if (currentBoard[0][2] === mark) {
+      if (currentBoard[1][1] === mark) {
+        if (currentBoard[2][0] === mark) {
           winTiles = [[0, 2], [1, 1], [2, 0]];
           return true;
         }
@@ -162,24 +167,25 @@ const GameController = (() => {
   };
   /* this function checks every winCondition and
   returns true if one of the win conditions is true */
-  const checkWinner = (mark) => {
+  const checkWinner = (mark, currentBoard) => {
+    console.log('checkWinnerBoard:');
+    console.log(currentBoard);
     let isWinner = false;
-    const board = Gameboard.getGameBoard();
-    for (let i = 0; i < board.length; i++) {
+    for (let i = 0; i < currentBoard.length; i++) {
       if (i === 0) {
-        for (let j = 0; j < board[i].length; j++) {
-          if (checkVertical(board, mark, j)) {
+        for (let j = 0; j < currentBoard[i].length; j++) {
+          if (checkVertical(currentBoard, mark, j)) {
             isWinner = true;
           }
         }
       }
-      if (board[i][0] === mark) {
-        if (checkHorizontal(board, mark, i)) {
+      if (currentBoard[i][0] === mark) {
+        if (checkHorizontal(currentBoard, mark, i)) {
           isWinner = true;
         }
       }
     }
-    if (checkDiagonal(board, mark)) {
+    if (checkDiagonal(currentBoard, mark)) {
       isWinner = true;
     }
     if (isWinner) {
@@ -217,14 +223,62 @@ const GameController = (() => {
     return freeTiles;
   };
 
+  const makeVirtualMove = (board) => {
+    let points = 0;
+    const freeTiles = getAllAvailableMoves();
+    const newBoards = [];
+    for (let i = 0; i < freeTiles.length; i++) {
+      const row = freeTiles[i][0];
+      const col = freeTiles[i][1];
+      const newBoard = [['', '', ''], ['', '', ''], ['', '', '']];
+      for (let j = 0; j < newBoard.length; j++) {
+        for (let k = 0; k < newBoard[j].length; k++) {
+          newBoard[j][k] = board[j][k];
+        }
+      }
+      newBoard[row][col] = players[1].mark;
 
-  // function to make one move for the PC
-  const makePCmove = (player) => {
+      newBoards.push([0, newBoard]);
+    }
+    for (let i = 0; i < newBoards.length; i++) {
+      if (checkWinner(players[1].mark, newBoards[i][1])) {
+        winner = getWinner();
+        if (winner === 'computer') {
+          points += 10;
+          for (let j = 0; j < newBoards[i][1].length; j++) {
+            for (let k = 0; k < newBoards[i][1][j].length; k++) {
+              if (newBoards[i][1][j][k] != board[j][k]) {
+                makePCmove(players[1], j, k);
+                return;
+              }
+            }
+          }
+        } else if (winner === 'player') {
+          points -= 10;
+        }
+        winner = '';
+      }
+    }
+    makeRndmMove(players[1]);
+  };
+
+  const makeRndmMove = (player) => {
+    const board = Gameboard.getGameBoard();
     let pcMark = false;
     do {
       pcMark = player.setMark(rndmNumber(3), rndmNumber(3));
     } while (!pcMark);
-    if (checkWinner(player.mark)) {
+    if (checkWinner(player.mark, board)) {
+      ScreenController.deleteBoardEventListeners();
+      return;
+    }
+  };
+
+  // function to make one move for the PC
+  const makePCmove = (player, row, col) => {
+    const board = Gameboard.getGameBoard();
+    player.setMark(row, col);
+    if (checkWinner(player.mark, board)) {
       ScreenController.deleteBoardEventListeners();
       return;
     }
@@ -234,13 +288,18 @@ const GameController = (() => {
   // eslint-disable-next-line max-len
   // function to play one Round -> place one mark for the player and the computer
   const playRound = (row, col) => {
+    const board = Gameboard.getGameBoard();
     if (players[0].setMark(row, col) === true) {
-      if (checkWinner(players[0].mark) === true) {
+      if (checkWinner(players[0].mark, board) === true) {
         ScreenController.deleteBoardEventListeners();
         return;
       }
       setTimeout(() => {
-        makePCmove(players[1]);
+        if (ScreenController.diffiBut.value === 'Unbeatable') {
+          makeVirtualMove(board);
+        } else {
+          makeRndmMove(players[1]);
+        }
       }, 500);
     }
   };
@@ -264,6 +323,7 @@ const ScreenController = (() => {
   const endGame = document.getElementById('endGame');
   const endGameText = document.getElementById('endGameText');
   const newGameBut = document.getElementById('newGame');
+  const diffiBut = document.getElementById('diffi');
   let clickAgain = true;
 
   newGameBut.addEventListener('click', () => {
@@ -418,7 +478,7 @@ const ScreenController = (() => {
 
   addDivClicks();
 
-  return {deleteBoardEventListeners};
+  return {deleteBoardEventListeners, diffiBut};
 })();
 
 Gameboard.createGameBoard();
