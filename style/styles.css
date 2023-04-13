@@ -73,10 +73,10 @@ main {
 }
 
 #chooseMark {
-	display: grid;
 	opacity: 0;
-	grid-template-columns: 1fr 1fr;
-	column-gap: 20px;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
 	text-align: center;
 	overflow: hidden;
 	animation: height2 4s forwards;
@@ -85,9 +85,36 @@ main {
 	grid-template-rows: 2rem 3rem;
 	align-items: center;
 	position: relative;
+	column-gap: 20px;
 }
 
-#chooseMark > p {
+#difficulty {
+	display: flex;
+	flex-direction: column;
+	row-gap: 10px;
+	align-items: center;
+	justify-content: center;
+}
+
+#difficulty > label {
+	text-align: center;
+	font-weight: 700;
+	font-size: larger;
+	margin: 0;
+}
+
+#diffi {
+	height: 2rem;
+}
+
+#buttons {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	column-gap: 20px;
+	row-gap: 10px;
+}
+
+#buttons > p {
 	grid-column: 1/-1;
 	text-align: center;
 	font-weight: 700;
@@ -95,7 +122,7 @@ main {
 	margin: 0;
 }
 
-#chooseMark > button,
+#buttons > button,
 #newGame {
 	background-color: white;
 	width: 5rem;
@@ -106,16 +133,16 @@ main {
 	color: black;
 }
 
-#chooseMark > button:first-of-type {
+#buttons > button:first-of-type {
 	justify-self: end;
 }
 
-#chooseMark > button:hover,
-#chooseMark > button:focus {
+#buttons > button:hover,
+#buttons > button:focus {
 	background-color: var(--secondColor);
 }
 
-#chooseMark > button:active {
+#buttons > button:active {
 	background-color: var(--secondColor);
 	box-shadow: 4px 4px 2px grey;
 	border: inset grey 2px;
