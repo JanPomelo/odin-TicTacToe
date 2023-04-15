@@ -82,7 +82,7 @@ const GameController = (() => {
       players[0] = players[1];
       players[1] = zs;
       if (ScreenController.diffiBut.value === 'Unbeatable') {
-        makeVirtualMove();
+        makeBestMove(Gameboard.getGameBoard());
       } else {
         makeRndmMove(players[1]);
       }
@@ -168,8 +168,6 @@ const GameController = (() => {
   /* this function checks every winCondition and
   returns true if one of the win conditions is true */
   const checkWinner = (mark, currentBoard) => {
-    console.log('checkWinnerBoard:');
-    console.log(currentBoard);
     let isWinner = false;
     for (let i = 0; i < currentBoard.length; i++) {
       if (i === 0) {
@@ -210,8 +208,7 @@ const GameController = (() => {
   };
 
   // function to return points when a game is won or lost
-  const getAllAvailableMoves = () => {
-    const board = Gameboard.getGameBoard();
+  /* const getAllAvailableMoves = (board) => {
     const freeTiles = [];
     for (let i = 0; i < board.length; i++) {
       for (let j = 0; j < board[i].length; j++) {
@@ -221,46 +218,111 @@ const GameController = (() => {
       }
     }
     return freeTiles;
-  };
+  }; */
 
-  const makeVirtualMove = (board) => {
-    let points = 0;
-    const freeTiles = getAllAvailableMoves();
-    const newBoards = [];
+  /* const getAllBoards = (player, board) => {
+    const freeTiles = getAllAvailableMoves(board);
+    const allBoards = [board];
     for (let i = 0; i < freeTiles.length; i++) {
       const row = freeTiles[i][0];
       const col = freeTiles[i][1];
-      const newBoard = [['', '', ''], ['', '', ''], ['', '', '']];
-      for (let j = 0; j < newBoard.length; j++) {
-        for (let k = 0; k < newBoard[j].length; k++) {
-          newBoard[j][k] = board[j][k];
+      const tempBoard = [['', '', ''], ['', '', ''], ['', '', '']];
+      for (let j = 0; j < tempBoard.length; j++) {
+        for (let k = 0; k < tempBoard[j].length; k++) {
+          tempBoard[j][k] = board[j][k];
         }
       }
-      newBoard[row][col] = players[1].mark;
-
-      newBoards.push([0, newBoard]);
+      tempBoard[row][col] = player.mark;
+      allBoards.push(tempBoard);
     }
-    for (let i = 0; i < newBoards.length; i++) {
-      if (checkWinner(players[1].mark, newBoards[i][1])) {
-        winner = getWinner();
-        if (winner === 'computer') {
-          points += 10;
-          for (let j = 0; j < newBoards[i][1].length; j++) {
-            for (let k = 0; k < newBoards[i][1][j].length; k++) {
-              if (newBoards[i][1][j][k] != board[j][k]) {
-                makePCmove(players[1], j, k);
-                return;
-              }
-            }
-          }
-        } else if (winner === 'player') {
-          points -= 10;
-        }
-        winner = '';
-      }
-    }
-    makeRndmMove(players[1]);
+    return allBoards;
   };
+  */
+
+  const minimax = (board, depth, isMaximizing) => {
+    const computerWon = checkWinner(players[1].mark, board);
+    resetWinner();
+    const playerWon = checkWinner(players[0].mark, board);
+    resetWinner();
+    const winner = getWinner();
+    resetWinner();
+    let score;
+    if (computerWon) {
+      score = 10 - depth;
+      return score;
+    }
+    if (playerWon) {
+      score = -10 + depth;
+      return score;
+    }
+    if (winner === 'draw') {
+      score = 0;
+      return score;
+    }
+    if (isMaximizing) {
+      let bestScore = -Infinity;
+      for (let i = 0; i < board.length; i++) {
+        for (let j = 0; j < board[i].length; j++) {
+          if (board[i][j] === '') {
+            board[i][j] = players[1].mark;
+            const score = minimax(board, depth + 1, false);
+            bestScore = Math.max(score, bestScore);
+            board[i][j] = '';
+          }
+        }
+      }
+      return bestScore;
+    } else {
+      let bestScore = Infinity;
+      for (let i = 0; i < board.length; i++) {
+        for (let j = 0; j < board[i].length; j++) {
+          if (board[i][j] === '') {
+            board[i][j] = players[0].mark;
+            const score = minimax(board, depth + 1, true);
+            bestScore = Math.min(score, bestScore);
+            board[i][j] = '';
+          }
+        }
+      }
+      return bestScore;
+    }
+  };
+
+  const makeBestMove = () => {
+    const board = Gameboard.getGameBoard();
+    const tempBoard = [['', '', ''], ['', '', ''], ['', '', '']];
+    for (let i = 0; i < 3; i++) {
+      for (let j = 0; j < 3; j++) {
+        tempBoard[i][j] = board[i][j];
+      }
+    }
+    let move;
+    let bestScore = -Infinity;
+    for (let i = 0; i < 3; i++) {
+      for (let j = 0; j < 3; j++) {
+        if (tempBoard[i][j] == '') {
+          tempBoard[i][j] = players[1].mark;
+          const score = minimax(tempBoard, 0, false);
+          tempBoard[i][j] = '';
+          if (score > bestScore) {
+            bestScore = score;
+            move = [i, j];
+          }
+        }
+      }
+    }
+    makePCmove(players[1], move[0], move[1]);
+  };
+
+
+  /* const getAllBoardsWithAllMoves = () => {
+    const allBoards = getAllBoards(players[1], Gameboard.getGameBoard());
+    for (let i = 0; i < allBoards.length; i++) {
+      getAllBoards(players[1], allBoards[i]);
+    }
+  };
+  */
+
 
   const makeRndmMove = (player) => {
     const board = Gameboard.getGameBoard();
@@ -296,7 +358,7 @@ const GameController = (() => {
       }
       setTimeout(() => {
         if (ScreenController.diffiBut.value === 'Unbeatable') {
-          makeVirtualMove(board);
+          makeBestMove(board);
         } else {
           makeRndmMove(players[1]);
         }
