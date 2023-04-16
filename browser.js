@@ -81,11 +81,11 @@ const GameController = (() => {
       const zs = players[0];
       players[0] = players[1];
       players[1] = zs;
-      if (ScreenController.diffiBut.value === 'Unbeatable') {
-        makeBestMove(Gameboard.getGameBoard());
-      } else {
-        makeRndmMove(players[1]);
-      }
+      // if (ScreenController.diffiBut.value === 'Unbeatable') {
+      makeBestMove(Gameboard.getGameBoard());
+      // } else {
+      //  makeRndmMove(players[1]);
+      // }
     }
   };
 
@@ -252,7 +252,7 @@ const GameController = (() => {
       return score;
     }
     if (playerWon) {
-      score = -10 + depth;
+      score = depth - 10;
       return score;
     }
     if (winner === 'draw') {
@@ -261,8 +261,8 @@ const GameController = (() => {
     }
     if (isMaximizing) {
       let bestScore = -Infinity;
-      for (let i = 0; i < board.length; i++) {
-        for (let j = 0; j < board[i].length; j++) {
+      for (let i = 0; i < 3; i++) {
+        for (let j = 0; j < 3; j++) {
           if (board[i][j] === '') {
             board[i][j] = players[1].mark;
             const score = minimax(board, depth + 1, false);
@@ -274,8 +274,8 @@ const GameController = (() => {
       return bestScore;
     } else {
       let bestScore = Infinity;
-      for (let i = 0; i < board.length; i++) {
-        for (let j = 0; j < board[i].length; j++) {
+      for (let i = 0; i < 3; i++) {
+        for (let j = 0; j < 3; j++) {
           if (board[i][j] === '') {
             board[i][j] = players[0].mark;
             const score = minimax(board, depth + 1, true);
@@ -357,11 +357,11 @@ const GameController = (() => {
         return;
       }
       setTimeout(() => {
-        if (ScreenController.diffiBut.value === 'Unbeatable') {
-          makeBestMove(board);
-        } else {
-          makeRndmMove(players[1]);
-        }
+        // if (ScreenController.diffiBut.value === 'Unbeatable') {
+        makeBestMove(board);
+        // } else {
+        //  makeRndmMove(players[1]);
+        // }
       }, 500);
     }
   };
@@ -515,14 +515,15 @@ const ScreenController = (() => {
   const showResult = () => {
     const winner = game.getWinner();
     if (winner != '') {
-      makeWinTilesVisible();
       if (winner === 'player') {
         // eslint-disable-next-line max-len
         endGameText.innerText = 'Congratulations! You beat the ugly thief and saved the DuckWorld!';
+        makeWinTilesVisible();
         endGame.classList = ['visible'];
       } else if (winner === 'computer') {
         // eslint-disable-next-line max-len
         endGameText.innerText = 'Oh No! You lost! Now the ugly thief will take over the DuckWorld!';
+        makeWinTilesVisible();
         endGame.classList = ['visible'];
       } else {
         // eslint-disable-next-line max-len
